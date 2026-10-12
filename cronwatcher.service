@@ -1,0 +1,17 @@
+[Unit]
+Description=cronwatcher - cron that only runs integrity-verified jobs
+# users from LDAP/SSSD and scripts on NFS must be reachable, or startup fails
+After=time-sync.target remote-fs.target nss-user-lookup.target
+
+[Service]
+ExecStart=/usr/local/bin/cronwatcher -c /etc/cronwatcher.tab -s /var/lib/cronwatcher
+Restart=on-failure
+RestartSec=5s
+# like cron.service: restarting the scheduler must not kill running jobs
+KillMode=process
+StateDirectory=cronwatcher
+StateDirectoryMode=0700
+# No ProtectSystem=/PrivateTmp= etc.: jobs inherit the sandbox and would break.
+
+[Install]
+WantedBy=multi-user.target

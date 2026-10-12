@@ -1,0 +1,11 @@
+[package]
+name = "cronwatcher"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "cron that only runs integrity-verified job scripts"
+license = "MIT"
+
+[dependencies]
+libc = "0.2"
+sha2 = "0.10"
