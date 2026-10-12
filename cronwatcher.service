@@ -10,7 +10,8 @@ RestartSec=5s
 # like cron.service: restarting the scheduler must not kill running jobs
 KillMode=process
 StateDirectory=cronwatcher
-StateDirectoryMode=0700
+# 0711: users reach their own users/NAME directory, nothing else
+StateDirectoryMode=0711
 # No ProtectSystem=/PrivateTmp= etc.: jobs inherit the sandbox and would break.
 
 [Install]

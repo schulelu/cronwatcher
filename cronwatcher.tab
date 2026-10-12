@@ -2,14 +2,17 @@
 # Install as /etc/cronwatcher.tab, owned by root, not writable by group/others.
 # Scripts are trusted when first seen; a changed script stays blocked until
 # `cronwatcher approve <script>`. A script missing at startup stays pending until approved.
-# Restart the service after editing this file (@reboot jobs still run only once per boot).
+# Edit with `cronwatcher edit`; the daemon reloads this file within a minute, no restart.
 #
 # m    h  dom mon dow  [user]  command [args...]  (absolute path, no shell: put pipes/quoting into the script)
-# user: run as that account (its groups, HOME, cwd = home); root still verifies the script first.
+# user: run as that account (its groups, HOME, cwd = home); root still verifies the script first,
+#       read with that account's permissions (it must be able to read it, as with cron).
 #       Without it, the job runs as the daemon (root). Needs the daemon to run as root.
 */5    *  *   *   *    /opt/jobs/backup.sh --full
 30     2  *   *   1-5  /opt/jobs/report.sh
 5      5  *   *   *    alice  /home/alice/jobs/daily.sh
+# MAILTO=/MAILON= apply to the jobs below: mail on failure (MAILON=fail) or every run (always).
+MAILTO=ops@example.com
 @daily                 /usr/local/bin/rotate-logs
 @reboot                /opt/jobs/warmup.sh
 # Runs (verified too) when any job is refused. Gets CRONWATCHER_TAMPERED and CRONWATCHER_REASON.
